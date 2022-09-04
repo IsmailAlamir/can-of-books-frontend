@@ -1,11 +1,51 @@
-# Start your own "Can of Books" App
+# Project Name
 
-This repository has starter code to begin work on creating your own online bookshelf.
+**Author**: Ismail AlAmir
+**Version**: 1.0.0 
 
-## What can books do?
+## Overview
+ building a books shelf  that user can see the books what he likes.
 
-Books are life-changing. They have the power to enlighten, educate, entertain, heal, and help us grow. Build out this code base to create an web app to track what books have impacted you, and what's recommended to read next.
+## Getting Started
+planning what we need to do , management the time , start coding.
 
-## Use this template
+## Architecture
+React Component 
+API tool
+mongoose
 
-Clone this repo to your own account with the green "Use this template" button. Then, add any collaborators. Now you are ready to start adding features! Deploy your site to let the world know which books have had the greatest impact on you, and what's recommended. Enjoy!
+## Change Log
+4-09-2022 5:00pm - Application now has a fully-functional express server.
+
+
+## Estimates
+Name of feature: Set up your repository 
+Estimate of time needed to complete: 30 min
+
+Start time: 2:00 pm
+
+Finish time: 3:00 pm
+
+Actual time needed to complete: 1 hrs
+
+Name of feature: storage
+Estimate of time needed to complete: 1 hr
+
+Start time: 3:00 pm
+
+Finish time: 4:00 pm
+
+Actual time needed to complete: 1 hrs
+
+Name of feature: Book Component
+Estimate of time needed to complete: 1 hr
+
+Start time: 4:00 pm
+
+Finish time: 5:00 pm
+
+Actual time needed to complete: 1 hrs
+
+
+## Credit and Collaborations
+[Abdallah Mosa](https://github.com/AbdallahMosa)
