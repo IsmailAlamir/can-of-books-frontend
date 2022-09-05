@@ -1,23 +1,73 @@
 import React from 'react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       books: [],
-      show : false
     }
   }
+
+
+  addBook = (event) =>{
+    event.preventDefault();
+    const obj = {
+        title : event.target.title.value,
+        description : event.target.description.value,
+        status : event.target.status.value
+    }
+    console.log("hiii")
+    console.log(obj)
+    axios
+    .post(`${process.env.REACT_APP_URL}books`, obj)
+    .then(result =>{
+      this.setState({
+        books : result.data
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+  deleteBook= (id) => {
+    axios
+    .delete(`${process.env.REACT_APP_URL}deleteBook/${id}`) 
+    .then(result =>{
+      this.setState({
+        books : result.data
+      })
+    })
+    .catch(err=>{
+      console.log(err);
+    })
+  }
+
+
+handleClose = () =>{
+this.setState({
+   show : false
+  });
+};
+ handleShow = () => {
+    this.setState({
+       show : true
+      });
+ };
+
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
   componentDidMount = () => {
     axios
-    .get(`http://localhost:3000/books`)
+    .get(`${process.env.REACT_APP_URL}books`)
     .then(result =>{
       console.log(result.data);
       this.setState({
         books : result.data,
-        show : true
       })
     })
     .catch(err=>{
@@ -29,6 +79,59 @@ class BestBooks extends React.Component {
     return (
       <>
         <h2>My Essential Lifelong Learning &amp; Formation Shelf</h2>
+
+        <div>
+        {" "}
+        <Button variant="primary" onClick={this.handleShow}>
+          Add Book
+        </Button>
+        <Modal show={this.state.show} onHide={this.handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Book</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form onSubmit={this.addBook} >
+              <Form.Group
+                className="mb-3"
+                name="title"
+                controlId="exampleForm.ControlInput1"
+              >
+                <Form.Label>title</Form.Label>
+                <Form.Control
+                  type="text"
+                    name ="title"
+                />
+                
+              </Form.Group>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlTextarea1"
+                name ="description"
+              >
+                <Form.Label>description</Form.Label>
+                <Form.Control as="textarea" rows={3}  name ="description"/>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>status</Form.Label>
+                <Form.Select name="status" id="status">
+                  <option value="Life Changing">Life Changing</option>
+                  <option value ="Favorite Five">Favorite Five</option>
+                  <option value="Recommended To Me">Recommended To Me</option>
+                </Form.Select>
+                <Button variant="primary" type="submit">
+            Save Changes
+          </Button>
+
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+           </Modal.Footer>
+        </Modal>
+</div>
         {this.state.books.length ? (<Carousel>{
           this.state.books.map(Element => {
             return (
@@ -42,6 +145,10 @@ class BestBooks extends React.Component {
           <h3>{Element.title}</h3>
           <p>{Element.description}</p>
           <h3>{Element.status}</h3>
+          <Button variant="secondary" onClick={() => this.deleteBook(Element._id)}>
+          Delete
+            </Button>
+
         </Carousel.Caption>
       </Carousel.Item>
     )
