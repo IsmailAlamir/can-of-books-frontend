@@ -1,7 +1,8 @@
 import { Component } from "react";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-class Profile extends Component {
+
+class About extends Component {
   render() {
     /* TODO: render information about the developers */
     return (
@@ -12,7 +13,7 @@ class Profile extends Component {
       <Card style={{ width: '18rem' , backgroundColor:"#212529" , color:"white"}}   >
       <Card.Img variant="top" src="https://avatars.githubusercontent.com/u/109903994?v=4" />
       <Card.Body>
-        <Card.Title>Abdallah Mosa</Card.Title>
+        <Card.Title>Ismail Al Amir</Card.Title>
         <Card.Text>
         Hi, I'm Ismail Al Amir from Jordan , Full-stack developer
         </Card.Text>
@@ -32,4 +33,4 @@ class Profile extends Component {
       )
   }
 };
-export default Profile;
+export default About;
