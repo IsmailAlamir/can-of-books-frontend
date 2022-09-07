@@ -5,30 +5,30 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import UpdateForm from "./UpdateForm";
+import { withAuth0 } from '@auth0/auth0-react';
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       books: [],
-      show: false,
+      show : false,
       showUp: false,
-      crtBook: {}
+      crtBook :{},
+      email : ""
     };
   }
   addBook = (event) => {
     event.preventDefault();
+    const { user } = this.props.auth0;
     const obj = {
       title: event.target.title.value,
       description: event.target.description.value,
       status: event.target.status.value,
+      email : user.email
     };
-
-
-
-    // console.log(obj);
+    console.log("hiii");
+    console.log(obj);
     axios
-
-
       .post(`${process.env.REACT_APP_URL}books`, obj)
       .then((result) => {
         this.setState({
@@ -41,9 +41,10 @@ class BestBooks extends React.Component {
       });
   };
   deleteBook = (id) => {
-
+    const { user } = this.props.auth0;
+    let email =user.email
     axios
-      .delete(`${process.env.REACT_APP_URL}deleteBook/${id}`)
+      .delete(`${process.env.REACT_APP_URL}deleteBook/${id}?email=${email}`)
       .then((result) => {
         this.setState({
           books: result.data,
@@ -59,50 +60,48 @@ class BestBooks extends React.Component {
       showUp: false
     });
   };
-
   handleShow = () => {
     this.setState({
       show: true,
     });
   };
-
-
-  openForm = (Element) => {
+  openForm =(Element)=>{
     this.setState({
       showUp: true,
-      crtBook: Element
+      crtBook : Element
     });
   }
-
-
-  handleUpdate = (event) => {
+  handleUpdate =(event) =>{
+    const { user } = this.props.auth0;
+    let email =user.email
     event.preventDefault();
     console.log("hi")
     const id = this.state.crtBook._id;
-    let obj = {
-      title: event.target.title.value,
-      description: event.target.description.value,
-
-      status: event.target.status.value,
-    }
-    axios
-      .put(`${process.env.REACT_APP_URL}book/${id}`, obj)
-      .then((result) => {
-        console.log(result.data);
-        this.setState({
-          books: result.data,
-        });
-        this.handleClose();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+ let obj ={
+  title: event.target.title.value,
+  description: event.target.description.value,
+  status: event.target.status.value,
+ }
+ axios
+ .put(`${process.env.REACT_APP_URL}book/${id}?email=${email}`,obj)
+ .then((result) => {
+  console.log(result.data);
+  this.setState({
+    books: result.data,
+  });
+  this.handleClose();
+})
+.catch((err) => {
+  console.log(err);
+});
   }
   /* TODO: Make a GET request to your API to fetch all the books from the database  */
   componentDidMount = () => {
-
+    const { user } = this.props.auth0;
+    let email =user.email
+    console.log(email)
     axios
-      .get(`${process.env.REACT_APP_URL}books`)
+      .get(`${process.env.REACT_APP_URL}books?email=${email}`)
       .then((result) => {
         console.log(result.data);
         this.setState({
@@ -113,7 +112,6 @@ class BestBooks extends React.Component {
         console.log(err);
       });
   };
-
   render() {
     /* TODO: render all the books in a Carousel */
     return (
@@ -183,13 +181,13 @@ class BestBooks extends React.Component {
                     <Button
                       variant="danger"
                       onClick={() => this.deleteBook(Element._id)}
-                       style={{ margin :'10px' }}
+                      style={{ margin :'10px' }}
                     >
                       Delete
                     </Button>
                     <Button
                       variant="warning"
-                      onClick={() => this.openForm(Element)}
+                      onClick={()=>this.openForm(Element)}
                     >
                       update
                     </Button>
@@ -198,12 +196,12 @@ class BestBooks extends React.Component {
               );
             })}{" "}
           </Carousel>
-          <UpdateForm
-            showUp={this.state.showUp}
-            handleClose={this.handleClose}
-            handleUpdate={this.handleUpdate}
-            crtBook={this.state.crtBook}
-          />
+            <UpdateForm
+        showUp = {this.state.showUp}
+        handleClose = {this.handleClose}
+        handleUpdate= {this.handleUpdate}
+        crtBook = {this.state.crtBook}
+        />
         </div>
         ) : (
           <h3>No Books Found :(</h3>
@@ -212,6 +210,4 @@ class BestBooks extends React.Component {
     );
   }
 }
-
-
-export default BestBooks;
+export default withAuth0(BestBooks);
